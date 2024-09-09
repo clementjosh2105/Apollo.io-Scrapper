@@ -55,15 +55,36 @@ public class Constants {
           + "  \"timezone_offset\": -330,\n"
           + "  \"cacheKey\": 1718267668563\n"
           + "}";
+  public static final String F_NAME = "First Name";
+  public static final String L_NAME = "Last Name";
   public static final String NAME = "Name";
   public static final String TITLE = "Title";
   public static final String EMAIL = "Email";
+  public static final String LINKED_IN_URL = "Linked-In URL";
+  public static final String COUNTRY = "Country";
+  public static final String STATE = "State";
+  public static final String CITY = "City";
   public static final String ORGANIZATION_NAME = "Organization Name";
+  public static final String INDUSTRY = "Industry";
+  public static final String DELIMITER = "::DELIMITER:::";
   public static final String CONTACTS_CSV_HEADER =
-      NAME + "," + ORGANIZATION_NAME + "," + TITLE + "," + EMAIL + "\n";
+      String.join(
+          DELIMITER,
+          NAME,
+          F_NAME,
+          L_NAME,
+          TITLE,
+          ORGANIZATION_NAME,
+          INDUSTRY,
+          EMAIL,
+          LINKED_IN_URL,
+          COUNTRY,
+          STATE,
+          CITY);
   public static final String QUOTES = "\"";
   public static final String X_API_KEY = "X-Api-Key";
-  public static final String API_KEY = "O4s71o31Juq1e4zZBM6oaw";
+  public static final String API_KEY = System.getenv("API_KEY");
+  //  public static final String API_KEY = "O4s71o31Juq1e4zZBM6oaw";
   public static final String EXCEPTION_OCCURRED = "Exception occurred: {}";
 
   public static final int CELL_TYPE_NUMERIC = 0;
@@ -76,9 +97,16 @@ public class Constants {
   public static final String TSV = "TSV";
   public static final String ORIGINAL_SHEET_NAME = "Original";
   public static final String WITHOUT_DUPLICATES_SHEET_NAME = "Without Duplicates";
-  public static final int COLUMN_COUNT_EXCEL = 4;
+  public static final int COLUMN_COUNT_EXCEL = 11;
   public static final int NAME_INDEX = 0;
-  public static final int ORGANIZATION_NAME_INDEX = 1;
-  public static final int TITLE_INDEX = 2;
-  public static final int EMAIL_INDEX = 4;
+  public static final int F_NAME_INDEX = 1;
+  public static final int L_NAME_INDEX = 2;
+  public static final int ORGANIZATION_NAME_INDEX = 4;
+  public static final int TITLE_INDEX = 3;
+  public static final int INDUSTRY_INDEX = 5;
+  public static final int EMAIL_INDEX = 6;
+  public static final int LINKED_IN_INDEX = 7;
+  public static final int COUNTRY_INDEX = 8;
+  public static final int STATE_INDEX = 9;
+  public static final int CITY_INDEX = 10;
 }

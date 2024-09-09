@@ -35,7 +35,10 @@ public class CSVExporter implements Exporter {
         exportHelper.getAndCreateFileWithExtensions(apolloSavedList, exporterEnum.getExtension());
     final int iterationCount = (int) Math.ceil((double) apolloSavedList.getCachedCount() / 100);
     try (OutputStream outputStream = new FileOutputStream(file)) {
-      outputStream.write(CONTACTS_CSV_HEADER.getBytes(StandardCharsets.UTF_8));
+      outputStream.write(
+          CONTACTS_CSV_HEADER
+              .replace(DELIMITER, exporterEnum.getDelimiter())
+              .getBytes(StandardCharsets.UTF_8));
       for (int i = 1; i <= iterationCount; i++) {
         log.info(
             "Writing {} records into the file {}",
@@ -67,9 +70,16 @@ public class CSVExporter implements Exporter {
             (String.join(
                         exporterEnum.getDelimiter(),
                         exportHelper.getQuotedString(contact.getName()),
-                        exportHelper.getQuotedString(contact.getOrganizationName()),
+                        exportHelper.getQuotedString(contact.getFName()),
+                        exportHelper.getQuotedString(contact.getLName()),
                         exportHelper.getQuotedString(contact.getTitle()),
-                        exportHelper.getQuotedString(contact.getEmail()))
+                        exportHelper.getQuotedString(contact.getOrganizationName()),
+                        exportHelper.getQuotedString(contact.getIndustry()),
+                        exportHelper.getQuotedString(contact.getEmail()),
+                        exportHelper.getQuotedString(contact.getLinkedInURL()),
+                        exportHelper.getQuotedString(contact.getCountry()),
+                        exportHelper.getQuotedString(contact.getState()),
+                        exportHelper.getQuotedString(contact.getCity()))
                     + "\n")
                 .getBytes(StandardCharsets.UTF_8));
     }

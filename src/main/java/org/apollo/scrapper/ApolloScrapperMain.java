@@ -13,7 +13,7 @@ public class ApolloScrapperMain {
     clearScreen();
     System.out.println(BANNER);
     ApolloScrappingProcess apolloScrappingProcess = new ApolloScrappingProcess();
-    apolloScrappingProcess.authenticate(START_ATTEMPT_COUNT_LOGIN);
+//    apolloScrappingProcess.authenticate(START_ATTEMPT_COUNT_LOGIN);
     apolloScrappingProcess.start(START_ATTEMPT_COUNT_LIST);
   }
 

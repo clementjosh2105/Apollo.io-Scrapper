@@ -33,16 +33,35 @@ public class ExcelExporter implements Exporter {
   private final ExportHelper exportHelper;
   private final ExporterEnum exporterEnum;
 
+  private void setCellValue(XSSFRow row, String value, int index) {
+    XSSFCell cell = row.createCell(index);
+    cell.setCellValue(value);
+  }
+
   private void processHeader(XSSFSheet spreadsheet) {
     XSSFRow row = spreadsheet.createRow(0);
     Cell cell = row.createCell(0);
     cell.setCellValue(NAME);
     cell = row.createCell(1);
-    cell.setCellValue(ORGANIZATION_NAME);
+    cell.setCellValue(F_NAME);
     cell = row.createCell(2);
+    cell.setCellValue(L_NAME);
+    cell = row.createCell(3);
     cell.setCellValue(TITLE);
     cell = row.createCell(4);
+    cell.setCellValue(ORGANIZATION_NAME);
+    cell = row.createCell(5);
+    cell.setCellValue(INDUSTRY);
+    cell = row.createCell(6);
     cell.setCellValue(EMAIL);
+    cell = row.createCell(7);
+    cell.setCellValue(LINKED_IN_URL);
+    cell = row.createCell(8);
+    cell.setCellValue(COUNTRY);
+    cell = row.createCell(9);
+    cell.setCellValue(STATE);
+    cell = row.createCell(10);
+    cell.setCellValue(CITY);
   }
 
   private void removeDuplicates(XSSFSheet spreadsheet, XSSFSheet noDuplicateSheet) {
@@ -135,19 +154,29 @@ public class ExcelExporter implements Exporter {
     int rowNumber = getStartingRowNumber(batchCount);
     for (int i = 0; i < apolloContactResponse.getContacts().size(); i++) {
       String name = apolloContactResponse.getContacts().get(i).getName();
+      String fName = apolloContactResponse.getContacts().get(i).getFName();
+      String lName = apolloContactResponse.getContacts().get(i).getLName();
       String organizationName = apolloContactResponse.getContacts().get(i).getOrganizationName();
       String title = apolloContactResponse.getContacts().get(i).getTitle();
+      String industry = apolloContactResponse.getContacts().get(i).getIndustry();
       String email = apolloContactResponse.getContacts().get(i).getEmail();
+      String linkedIn = apolloContactResponse.getContacts().get(i).getLinkedInURL();
+      String country = apolloContactResponse.getContacts().get(i).getCountry();
+      String state = apolloContactResponse.getContacts().get(i).getState();
+      String city = apolloContactResponse.getContacts().get(i).getCity();
       if (!Objects.toString(email, "").isEmpty()) {
         XSSFRow row = sheet.createRow(rowNumber++);
-        XSSFCell cell = row.createCell(NAME_INDEX);
-        cell.setCellValue(name);
-        cell = row.createCell(ORGANIZATION_NAME_INDEX);
-        cell.setCellValue(organizationName);
-        cell = row.createCell(TITLE_INDEX);
-        cell.setCellValue(title);
-        cell = row.createCell(EMAIL_INDEX);
-        cell.setCellValue(email);
+        setCellValue(row, name, NAME_INDEX);
+        setCellValue(row, fName, F_NAME_INDEX);
+        setCellValue(row, lName, L_NAME_INDEX);
+        setCellValue(row, title, TITLE_INDEX);
+        setCellValue(row, organizationName, ORGANIZATION_NAME_INDEX);
+        setCellValue(row, industry, INDUSTRY_INDEX);
+        setCellValue(row, email, EMAIL_INDEX);
+        setCellValue(row, linkedIn, LINKED_IN_INDEX);
+        setCellValue(row, country, COUNTRY_INDEX);
+        setCellValue(row, state, STATE_INDEX);
+        setCellValue(row, city, CITY_INDEX);
       }
     }
   }
