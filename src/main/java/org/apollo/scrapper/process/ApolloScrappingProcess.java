@@ -87,7 +87,7 @@ public class ApolloScrappingProcess {
   }
 
   public void start(int attempts) throws URISyntaxException, JsonProcessingException {
-    clearScreen();
+//    clearScreen();
     if (attempts > 3) {
       log.error("Max attempts for login exceeded. Please try again after sometime.");
       System.exit(0);

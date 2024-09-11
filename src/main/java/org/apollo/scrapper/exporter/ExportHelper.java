@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 public class ExportHelper {
 
   public String getResponse(String requestBody, String url) throws URISyntaxException {
-    log.info("Request made to apollo with url {}", url);
+    log.info("Request made to apollo with url {} & rb {}", url, requestBody);
     RestTemplate restTemplate = new RestTemplate();
     URI uri = new URI(url);
     HttpHeaders headers = new HttpHeaders();

@@ -3,6 +3,7 @@ package org.apollo.scrapper.exporter;
 import static org.apollo.scrapper.constants.Constants.*;
 import static org.apollo.scrapper.constants.Constants.CONTACT_LIST_URL;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -10,8 +11,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apollo.scrapper.bean.response.contacts.ApolloContactResponse;
+import org.apollo.scrapper.bean.response.contacts.ApolloContacts;
+import org.apollo.scrapper.bean.response.industries.ApolloIndustries;
+import org.apollo.scrapper.bean.response.industries.ApolloIndustryResponse;
 import org.apollo.scrapper.bean.response.list.ApolloSavedList;
 import org.apollo.scrapper.enums.ExporterEnum;
 
@@ -151,6 +157,7 @@ public class ExcelExporter implements Exporter {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     ApolloContactResponse apolloContactResponse =
         mapper.readValue(json, ApolloContactResponse.class);
+    Map<String, String> industriesNameMap = processIndustries(apolloContactResponse);
     int rowNumber = getStartingRowNumber(batchCount);
     for (int i = 0; i < apolloContactResponse.getContacts().size(); i++) {
       String name = apolloContactResponse.getContacts().get(i).getName();
@@ -158,7 +165,8 @@ public class ExcelExporter implements Exporter {
       String lName = apolloContactResponse.getContacts().get(i).getLName();
       String organizationName = apolloContactResponse.getContacts().get(i).getOrganizationName();
       String title = apolloContactResponse.getContacts().get(i).getTitle();
-      String industry = apolloContactResponse.getContacts().get(i).getIndustry();
+      String industry =
+          industriesNameMap.get(apolloContactResponse.getContacts().get(i).getOrganizationId());
       String email = apolloContactResponse.getContacts().get(i).getEmail();
       String linkedIn = apolloContactResponse.getContacts().get(i).getLinkedInURL();
       String country = apolloContactResponse.getContacts().get(i).getCountry();
@@ -179,6 +187,28 @@ public class ExcelExporter implements Exporter {
         setCellValue(row, city, CITY_INDEX);
       }
     }
+  }
+
+  private Map<String, String> processIndustries(ApolloContactResponse apolloContactResponse)
+      throws URISyntaxException, JsonProcessingException {
+    String ids =
+        String.join(
+                '"' + "," + '"',
+            apolloContactResponse.getContacts().stream()
+                .map(ApolloContacts::getOrganizationId)
+                .collect(Collectors.toSet()));
+    final String requestBody = String.format(REQUEST_FOR_INDUSTRY_NAME, ids);
+    String json = exportHelper.getResponse(requestBody, INDUSTRY_LIST_URL);
+    System.out.println(json);
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ApolloIndustries apolloIndustries = mapper.readValue(json, ApolloIndustries.class);
+    return apolloIndustries.getOrganizations().stream()
+        .collect(
+            Collectors.toMap(
+                ApolloIndustryResponse::getId,
+                apolloIndustryResponse ->
+                    String.join( "," , apolloIndustryResponse.getIndustries())));
   }
 
   private int getStartingRowNumber(int batchCount) {

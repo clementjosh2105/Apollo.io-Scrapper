@@ -26,6 +26,9 @@ public class ApolloContacts {
   @JsonProperty("organization_name")
   String organizationName;
 
+  @JsonProperty("organization_id")
+  String organizationId;
+
   @JsonProperty("linkedin_url")
   String linkedInURL;
 

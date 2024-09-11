@@ -4,6 +4,7 @@ import static org.apollo.scrapper.constants.Constants.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Scanner;
 import org.apollo.scrapper.process.ApolloScrappingProcess;
 
 public class ApolloScrapperMain {
@@ -12,8 +13,14 @@ public class ApolloScrapperMain {
       throws IOException, URISyntaxException, InterruptedException {
     clearScreen();
     System.out.println(BANNER);
+    if (API_KEY == null || API_KEY.isEmpty()) {
+      Scanner scanner = new Scanner(System.in);
+      System.out.println("API key not found. Kindly enter you API Key: ");
+      API_KEY = scanner.nextLine();
+    }
+
     ApolloScrappingProcess apolloScrappingProcess = new ApolloScrappingProcess();
-//    apolloScrappingProcess.authenticate(START_ATTEMPT_COUNT_LOGIN);
+    //    apolloScrappingProcess.authenticate(START_ATTEMPT_COUNT_LOGIN);
     apolloScrappingProcess.start(START_ATTEMPT_COUNT_LIST);
   }
 

@@ -7,12 +7,14 @@ public class Constants {
   public static final int START_ATTEMPT_COUNT_LOGIN = 0;
   public static final int START_ATTEMPT_COUNT_LIST = 0;
   public static final String CONTACT_LIST_URL = "https://api.apollo.io/v1/mixed_people/search";
+  public static final String INDUSTRY_LIST_URL =
+      "https://api.apollo.io/api/v1/organizations/load_snippets";
   public static final String SAVED_LIST_URL = "https://app.apollo.io/api/v1/labels/search";
   public static final String LOGIN_URL = "https://app.apollo.io/api/v1/auth/login";
 
   public static final String REQUEST_FOR_CONTACT_LIST =
       "{\n"
-          + "    \"finder_table_layout_id\": \"6667075ffa473b09db16d1fc\",\n"
+          + "    \"finder_table_layout_id\": \"6668980e82ea4906aef0e370\",\n"
           + "    \"contact_label_ids\": [\n"
           + "        \"%s\"\n"
           + "    ],\n"
@@ -27,6 +29,14 @@ public class Constants {
           + "    \"context\": \"people-index-page\",\n"
           + "    \"show_suggestions\": false,\n"
           + "    \"ui_finder_random_seed\": \"zf114oj3ic\",\n"
+          + "    \"cacheKey\": 1718117101909\n"
+          + "}";
+
+  public static final String REQUEST_FOR_INDUSTRY_NAME =
+      "{\n"
+          + "    \"ids\": [\n"
+          + "        \"%s\"\n"
+          + "    ],\n"
           + "    \"cacheKey\": 1718117101909\n"
           + "}";
   public static final String REQUEST_FOR_SAVED_LIST =
@@ -83,8 +93,8 @@ public class Constants {
           CITY);
   public static final String QUOTES = "\"";
   public static final String X_API_KEY = "X-Api-Key";
-  public static final String API_KEY = System.getenv("API_KEY");
-  //  public static final String API_KEY = "O4s71o31Juq1e4zZBM6oaw";
+  //  public static String API_KEY = System.getenv("API_KEY");
+  public static String API_KEY = "O4s71o31Juq1e4zZBM6oaw";
   public static final String EXCEPTION_OCCURRED = "Exception occurred: {}";
 
   public static final int CELL_TYPE_NUMERIC = 0;
