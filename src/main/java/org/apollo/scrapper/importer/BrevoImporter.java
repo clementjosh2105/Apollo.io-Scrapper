@@ -31,6 +31,11 @@ public class BrevoImporter implements Importer {
   private final ImportHelper importHelper;
   private final ImporterEnum importerEnum;
 
+  private static String getListName() {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM hh:mm a");
+    return simpleDateFormat.format(new Date());
+  }
+
   @Override
   public void importApolloList(ApolloSavedList apolloSavedList)
       throws URISyntaxException, IOException {
@@ -104,10 +109,5 @@ public class BrevoImporter implements Importer {
     json =
         importHelper.getResponse(brevoContactsImportBean, IMPORT_CONTACTS_URL);
     System.out.println(json);
-  }
-
-  private String getListName() {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM");
-    return simpleDateFormat.format(new Date());
   }
 }

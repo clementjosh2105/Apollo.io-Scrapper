@@ -4,6 +4,8 @@ import static org.apollo.scrapper.constants.Constants.*;
 import static org.apollo.scrapper.constants.ApolloConstants.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import org.apollo.scrapper.process.ApolloScrappingProcess;
 
@@ -35,4 +37,10 @@ public class ApolloScrapperMain {
 
     }
   }
+
+  private static String getListName() {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM hh:mm a");
+    return simpleDateFormat.format(new Date());
+  }
+
 }
