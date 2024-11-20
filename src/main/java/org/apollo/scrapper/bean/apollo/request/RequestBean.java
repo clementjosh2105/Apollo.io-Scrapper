@@ -1,11 +1,10 @@
-package org.apollo.scrapper.bean.request;
+package org.apollo.scrapper.bean.apollo.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Data

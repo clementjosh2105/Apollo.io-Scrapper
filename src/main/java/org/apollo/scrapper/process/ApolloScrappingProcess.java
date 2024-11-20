@@ -1,5 +1,6 @@
 package org.apollo.scrapper.process;
 
+import static org.apollo.scrapper.constants.ApolloConstants.*;
 import static org.apollo.scrapper.constants.Constants.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,10 +13,12 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.Scanner;
 import lombok.extern.slf4j.Slf4j;
-import org.apollo.scrapper.bean.response.list.ApolloSavedList;
-import org.apollo.scrapper.bean.response.list.ApolloSavedListResponse;
+import org.apollo.scrapper.bean.apollo.response.list.ApolloSavedList;
+import org.apollo.scrapper.bean.apollo.response.list.ApolloSavedListResponse;
 import org.apollo.scrapper.exporter.ExportHelper;
 import org.apollo.scrapper.exporter.Exporter;
+import org.apollo.scrapper.importer.ImportHelper;
+import org.apollo.scrapper.importer.Importer;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,7 +43,7 @@ public class ApolloScrappingProcess {
     URI uri = new URI(url);
     HttpHeaders headers = new HttpHeaders();
     headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-    headers.set(X_API_KEY, API_KEY);
+    headers.set(API_KEY_HEADER, API_KEY);
     HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
     ResponseEntity<String> result =
         restTemplate.exchange(uri, HttpMethod.POST, requestEntity, String.class);
@@ -86,8 +89,8 @@ public class ApolloScrappingProcess {
     }
   }
 
-  public void start(int attempts) throws URISyntaxException, JsonProcessingException {
-//    clearScreen();
+  public void start(int attempts) throws URISyntaxException, IOException {
+    //    clearScreen();
     if (attempts > 3) {
       log.error("Max attempts for login exceeded. Please try again after sometime.");
       System.exit(0);
@@ -102,15 +105,41 @@ public class ApolloScrappingProcess {
       printMenu(attempts, true);
     }
     if (listInfo.getCachedCount() > 0) {
-      ExportHelper exportHelper = new ExportHelper();
-      Exporter exporter = exportHelper.getExporter(exportHelper, EXCEL);
-      exporter.export(listInfo);
-      printMenu(attempts, false);
+      printListMenu(listInfo, attempts);
     } else {
       log.error("The requested list is not empty with no records. Try entering a valid list name");
       ++attempts;
       printMenu(attempts, true);
     }
+  }
+
+  private void printListMenu(ApolloSavedList listInfo, int attempts)
+      throws URISyntaxException, IOException {
+    System.out.println("Press '1' to export this list as excel");
+    System.out.println("Press '2' to import this list to Brevo");
+    Scanner scanner = new Scanner(System.in);
+    String input = scanner.nextLine();
+    switch (input) {
+      case "1":
+        exportTheList(listInfo, attempts);
+        break;
+      case "2":
+        ImportHelper importHelper = new ImportHelper();
+        Importer importer = importHelper.getImported(importHelper, EXCEL);
+        importer.importApolloList(listInfo);
+        break;
+      default:
+        ++attempts;
+        printMenu(attempts, true);
+    }
+  }
+
+  private void exportTheList(ApolloSavedList listInfo, int attempts)
+      throws URISyntaxException, IOException {
+    ExportHelper exportHelper = new ExportHelper();
+    Exporter exporter = exportHelper.getExporter(exportHelper, EXCEL);
+    exporter.export(listInfo);
+    printMenu(attempts, false);
   }
 
   private ApolloSavedList getApolloSavedList(String listName) {
@@ -122,10 +151,10 @@ public class ApolloScrappingProcess {
     return listInfo;
   }
 
-  private void printMenu(int attempts, boolean isError)
-      throws URISyntaxException, JsonProcessingException {
+  private void printMenu(int attempts, boolean isError) throws URISyntaxException, IOException {
     clearScreen();
-    System.out.println("Export another list? Press 'Y' to proceed and any other key to quit");
+    System.out.println(
+        "Export/Import another list? Press 'Y' to proceed and any other key to quit");
     Scanner scanner = new Scanner(System.in);
     String input = scanner.nextLine();
     if (input.equalsIgnoreCase("y")) start(isError ? attempts : START_ATTEMPT_COUNT_LIST);

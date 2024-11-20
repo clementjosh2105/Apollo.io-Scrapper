@@ -1,21 +1,18 @@
-package org.apollo.scrapper.bean.response.list;
+package org.apollo.scrapper.bean.apollo.response.contacts;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApolloSavedList {
-  String id;
-  String name;
-
-  @JsonProperty("cached_count")
-  int cachedCount;
+public class ApolloContactResponse {
+    List<ApolloContacts> contacts;
 }

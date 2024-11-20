@@ -1,6 +1,6 @@
 package org.apollo.scrapper.exporter;
 
-import org.apollo.scrapper.bean.response.list.ApolloSavedList;
+import org.apollo.scrapper.bean.apollo.response.list.ApolloSavedList;
 
 public interface Exporter {
 

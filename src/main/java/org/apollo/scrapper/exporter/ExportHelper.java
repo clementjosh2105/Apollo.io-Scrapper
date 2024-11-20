@@ -1,7 +1,6 @@
 package org.apollo.scrapper.exporter;
 
-import static org.apollo.scrapper.constants.Constants.*;
-import static org.apollo.scrapper.constants.Constants.QUOTES;
+import static org.apollo.scrapper.constants.ApolloConstants.*;
 import static org.apollo.scrapper.enums.ExporterEnum.*;
 import static org.apollo.scrapper.enums.ExporterEnum.EXCEL;
 import static org.apollo.scrapper.enums.ExporterEnum.TSV;
@@ -12,7 +11,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.Scanner;
 import lombok.extern.slf4j.Slf4j;
-import org.apollo.scrapper.bean.response.list.ApolloSavedList;
+import org.apollo.scrapper.bean.apollo.response.list.ApolloSavedList;
 import org.apollo.scrapper.constants.Constants;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +25,7 @@ public class ExportHelper {
     URI uri = new URI(url);
     HttpHeaders headers = new HttpHeaders();
     headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-    headers.set(X_API_KEY, API_KEY);
+    headers.set(API_KEY_HEADER, API_KEY);
     HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
     ResponseEntity<String> result =
         restTemplate.exchange(uri, HttpMethod.POST, requestEntity, String.class);

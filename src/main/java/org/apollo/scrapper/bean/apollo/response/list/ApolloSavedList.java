@@ -1,7 +1,7 @@
-package org.apollo.scrapper.bean.response.industries;
+package org.apollo.scrapper.bean.apollo.response.list;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApolloIndustryResponse {
-  private String id;
-  private List<String> industries;
+public class ApolloSavedList {
+  String id;
+  String name;
+
+  @JsonProperty("cached_count")
+  int cachedCount;
 }

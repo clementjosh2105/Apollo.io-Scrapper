@@ -1,7 +1,8 @@
-package org.apollo.scrapper.bean.response.contacts;
+package org.apollo.scrapper.bean.apollo.response.contacts;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,4 +37,7 @@ public class ApolloContacts {
   String state;
   String city;
   String country;
+
+  @JsonProperty("created_at")
+  Date createdAt;
 }

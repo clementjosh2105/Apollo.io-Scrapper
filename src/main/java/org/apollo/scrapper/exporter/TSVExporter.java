@@ -1,7 +1,6 @@
 package org.apollo.scrapper.exporter;
 
-import static org.apollo.scrapper.constants.Constants.*;
-import static org.apollo.scrapper.constants.Constants.CONTACT_LIST_URL;
+import static org.apollo.scrapper.constants.ApolloConstants.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +14,9 @@ import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apollo.scrapper.bean.response.contacts.ApolloContactResponse;
-import org.apollo.scrapper.bean.response.contacts.ApolloContacts;
-import org.apollo.scrapper.bean.response.list.ApolloSavedList;
+import org.apollo.scrapper.bean.apollo.response.contacts.ApolloContactResponse;
+import org.apollo.scrapper.bean.apollo.response.contacts.ApolloContacts;
+import org.apollo.scrapper.bean.apollo.response.list.ApolloSavedList;
 import org.apollo.scrapper.enums.ExporterEnum;
 
 @Slf4j

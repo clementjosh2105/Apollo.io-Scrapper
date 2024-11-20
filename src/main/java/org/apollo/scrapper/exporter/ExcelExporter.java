@@ -1,7 +1,7 @@
 package org.apollo.scrapper.exporter;
 
+import static org.apollo.scrapper.constants.ApolloConstants.*;
 import static org.apollo.scrapper.constants.Constants.*;
-import static org.apollo.scrapper.constants.Constants.CONTACT_LIST_URL;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -24,11 +24,12 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apollo.scrapper.bean.response.contacts.ApolloContactResponse;
-import org.apollo.scrapper.bean.response.contacts.ApolloContacts;
-import org.apollo.scrapper.bean.response.industries.ApolloIndustries;
-import org.apollo.scrapper.bean.response.industries.ApolloIndustryResponse;
-import org.apollo.scrapper.bean.response.list.ApolloSavedList;
+import org.apollo.scrapper.bean.apollo.response.contacts.ApolloContactResponse;
+import org.apollo.scrapper.bean.apollo.response.contacts.ApolloContacts;
+import org.apollo.scrapper.bean.apollo.response.contacts.ApolloContactsMapperBean;
+import org.apollo.scrapper.bean.apollo.response.industries.ApolloIndustries;
+import org.apollo.scrapper.bean.apollo.response.industries.ApolloIndustryResponse;
+import org.apollo.scrapper.bean.apollo.response.list.ApolloSavedList;
 import org.apollo.scrapper.enums.ExporterEnum;
 
 @Slf4j
@@ -160,6 +161,7 @@ public class ExcelExporter implements Exporter {
     Map<String, String> industriesNameMap = processIndustries(apolloContactResponse);
     int rowNumber = getStartingRowNumber(batchCount);
     for (int i = 0; i < apolloContactResponse.getContacts().size(); i++) {
+      ApolloContactsMapperBean.builder().build();
       String name = apolloContactResponse.getContacts().get(i).getName();
       String fName = apolloContactResponse.getContacts().get(i).getFName();
       String lName = apolloContactResponse.getContacts().get(i).getLName();

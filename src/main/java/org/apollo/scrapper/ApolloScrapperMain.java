@@ -1,7 +1,7 @@
 package org.apollo.scrapper;
 
 import static org.apollo.scrapper.constants.Constants.*;
-
+import static org.apollo.scrapper.constants.ApolloConstants.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Scanner;

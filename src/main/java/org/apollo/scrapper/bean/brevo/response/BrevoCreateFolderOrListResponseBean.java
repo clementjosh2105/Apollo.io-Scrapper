@@ -1,7 +1,6 @@
-package org.apollo.scrapper.bean.response.industries;
+package org.apollo.scrapper.bean.brevo.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApolloIndustries {
-
-  private List<ApolloIndustryResponse> organizations;
+public class BrevoCreateFolderOrListResponseBean {
+  private int id;
 }
