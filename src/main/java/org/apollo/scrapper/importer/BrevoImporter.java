@@ -8,13 +8,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import lombok.AllArgsConstructor;
 import org.apollo.scrapper.bean.apollo.response.contacts.ApolloContactResponse;
-import org.apollo.scrapper.bean.apollo.response.contacts.ApolloContactsMapperBean;
 import org.apollo.scrapper.bean.apollo.response.list.ApolloSavedList;
 import org.apollo.scrapper.bean.brevo.request.BrevoContactsImportBean;
 import org.apollo.scrapper.bean.brevo.request.BrevoCreateListBean;
@@ -36,13 +37,29 @@ public class BrevoImporter implements Importer {
     return simpleDateFormat.format(new Date());
   }
 
+  private Date getDate() throws ParseException {
+    Scanner scanner = new Scanner(System.in);
+    String startDateStr = scanner.nextLine();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    return simpleDateFormat.parse(startDateStr);
+  }
+
+  private Date getStartDate(String date) throws ParseException {
+    System.out.println("Enter the " + date + " date: ");
+    return getDate();
+  }
+
   @Override
   public void importApolloList(ApolloSavedList apolloSavedList)
-      throws URISyntaxException, IOException {
+      throws URISyntaxException, IOException, ParseException {
+    Date startDate = getStartDate("start");
+    System.out.println(startDate);
+    Date endDate = getStartDate("end");
+    System.out.println(endDate);
     final int iterationCount = (int) Math.ceil((double) apolloSavedList.getCachedCount() / 100);
     int folderId = checkAndGetFolderId(apolloSavedList.getName());
     for (int i = 1; i <= iterationCount; i++) {
-      processContacts(folderId, apolloSavedList, i);
+      processContacts(folderId, startDate, endDate, apolloSavedList, i);
     }
   }
 
@@ -67,7 +84,8 @@ public class BrevoImporter implements Importer {
     return brevoCreateFolderOrListResponseBean.getId();
   }
 
-  private void processContacts(int folderId, ApolloSavedList apolloSavedList, int batchCount)
+  private void processContacts(
+      int folderId, Date startDate, Date endDate, ApolloSavedList apolloSavedList, int batchCount)
       throws URISyntaxException, IOException {
     final String requestBody =
         String.format(REQUEST_FOR_CONTACT_LIST, apolloSavedList.getId(), batchCount);
@@ -81,7 +99,9 @@ public class BrevoImporter implements Importer {
             String.join(importerEnum.getDelimiter(), importerEnum.getHeader())
                 + Constants.LINE_BREAK);
     for (int i = 0; i < apolloContactResponse.getContacts().size(); i++) {
-      ApolloContactsMapperBean.builder().build();
+
+      Date createdDate = apolloContactResponse.getContacts().get(i).getCreatedAt();
+      if(startDate.after(createdDate)  && createdDate.before(endDate)) continue;
       String fName = apolloContactResponse.getContacts().get(i).getFName();
       String lName = apolloContactResponse.getContacts().get(i).getLName();
       String organizationName = apolloContactResponse.getContacts().get(i).getOrganizationName();
@@ -94,8 +114,7 @@ public class BrevoImporter implements Importer {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     BrevoCreateListBean brevoCreateListBean =
         BrevoCreateListBean.builder().name(getListName()).folderId(folderId).build();
-    json =
-        importHelper.getResponse(brevoCreateListBean, CREATE_LIST_URL);
+    json = importHelper.getResponse(brevoCreateListBean, CREATE_LIST_URL);
     BrevoCreateFolderOrListResponseBean brevoCreateFolderOrListResponseBean =
         mapper.readValue(json, BrevoCreateFolderOrListResponseBean.class);
     int listId = brevoCreateFolderOrListResponseBean.getId();
@@ -106,8 +125,7 @@ public class BrevoImporter implements Importer {
             .fileBody(String.valueOf(importContactsString))
             .build();
     System.out.println(mapper.writeValueAsString(brevoContactsImportBean));
-    json =
-        importHelper.getResponse(brevoContactsImportBean, IMPORT_CONTACTS_URL);
+    json = importHelper.getResponse(brevoContactsImportBean, IMPORT_CONTACTS_URL);
     System.out.println(json);
   }
 }

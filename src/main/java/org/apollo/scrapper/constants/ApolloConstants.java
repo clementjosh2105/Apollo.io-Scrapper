@@ -110,5 +110,4 @@ public class ApolloConstants {
   public static final int STATE_INDEX = 9;
   public static final int CITY_INDEX = 10;
     public static String API_KEY = System.getenv("APOLLO_API_KEY");
-//  public static String API_KEY = "O4s71o31Juq1e4zZBM6oaw";
 }
