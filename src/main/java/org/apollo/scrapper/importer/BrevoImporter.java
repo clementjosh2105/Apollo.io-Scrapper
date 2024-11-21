@@ -54,8 +54,8 @@ public class BrevoImporter implements Importer {
     final int iterationCount = (int) Math.ceil((double) apolloSavedList.getCachedCount() / 100);
     int folderId = checkAndGetFolderId(apolloSavedList.getName());
     System.out.println("Import criteria");
-    System.out.println("Press 1 to filter based on date range");
-    System.out.println("Press 2 process all records");
+    System.out.println("Press '1' to filter based on date range");
+    System.out.println("Press '2' process all records");
     Scanner scanner = new Scanner(System.in);
     String ip = scanner.nextLine();
     switch (ip) {
@@ -118,15 +118,16 @@ public class BrevoImporter implements Importer {
     for (int i = 0; i < apolloContactResponse.getContacts().size(); i++) {
 
       Date createdDate = apolloContactResponse.getContacts().get(i).getCreatedAt();
-      if (!((createdDate.equals(startDate) || createdDate.after(startDate))
-          && (createdDate.before(endDate) || createdDate.equals(endDate)))) continue;
+      if (Objects.nonNull(startDate) || Objects.nonNull(endDate))
+        if (!((createdDate.equals(startDate) || createdDate.after(startDate))
+            && (createdDate.before(endDate) || createdDate.equals(endDate)))) continue;
       String fName = apolloContactResponse.getContacts().get(i).getFName();
       String lName = apolloContactResponse.getContacts().get(i).getLName();
       String organizationName = apolloContactResponse.getContacts().get(i).getOrganizationName();
       String title = apolloContactResponse.getContacts().get(i).getTitle();
       String email = apolloContactResponse.getContacts().get(i).getEmail();
-      log.info("Record with name {} created at {} ", fName, createdDate);
       if (Objects.toString(email, "").isEmpty()) continue;
+      log.info("Record with name {} created at {} ", fName, createdDate);
       importContactsString
           .append(String.join(",", email, fName, lName, title, organizationName))
           .append(Constants.LINE_BREAK);
