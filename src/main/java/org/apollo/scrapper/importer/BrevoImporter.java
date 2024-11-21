@@ -101,7 +101,8 @@ public class BrevoImporter implements Importer {
     for (int i = 0; i < apolloContactResponse.getContacts().size(); i++) {
 
       Date createdDate = apolloContactResponse.getContacts().get(i).getCreatedAt();
-      if(startDate.after(createdDate)  && createdDate.before(endDate)) continue;
+      if (!((createdDate.equals(startDate) || createdDate.after(startDate))
+          && (createdDate.before(endDate) || createdDate.equals(endDate)))) continue;
       String fName = apolloContactResponse.getContacts().get(i).getFName();
       String lName = apolloContactResponse.getContacts().get(i).getLName();
       String organizationName = apolloContactResponse.getContacts().get(i).getOrganizationName();
@@ -124,8 +125,8 @@ public class BrevoImporter implements Importer {
             .listIds(List.of(listId))
             .fileBody(String.valueOf(importContactsString))
             .build();
-    System.out.println(mapper.writeValueAsString(brevoContactsImportBean));
     json = importHelper.getResponse(brevoContactsImportBean, IMPORT_CONTACTS_URL);
     System.out.println(json);
+    System.out.println("Contacts imported successfully");
   }
 }

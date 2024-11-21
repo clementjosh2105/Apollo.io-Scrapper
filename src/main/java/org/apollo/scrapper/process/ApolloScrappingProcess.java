@@ -1,6 +1,7 @@
 package org.apollo.scrapper.process;
 
 import static org.apollo.scrapper.constants.ApolloConstants.*;
+import static org.apollo.scrapper.constants.BrevoConstants.BREVO;
 import static org.apollo.scrapper.constants.Constants.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,6 +11,7 @@ import java.io.Console;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.Objects;
 import java.util.Scanner;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +91,7 @@ public class ApolloScrappingProcess {
     }
   }
 
-  public void start(int attempts) throws URISyntaxException, IOException {
+  public void start(int attempts) throws URISyntaxException, IOException, ParseException {
     //    clearScreen();
     if (attempts > 3) {
       log.error("Max attempts for login exceeded. Please try again after sometime.");
@@ -114,7 +116,7 @@ public class ApolloScrappingProcess {
   }
 
   private void printListMenu(ApolloSavedList listInfo, int attempts)
-      throws URISyntaxException, IOException {
+      throws URISyntaxException, IOException, ParseException {
     System.out.println("Press '1' to export this list as excel");
     System.out.println("Press '2' to import this list to Brevo");
     Scanner scanner = new Scanner(System.in);
@@ -125,8 +127,9 @@ public class ApolloScrappingProcess {
         break;
       case "2":
         ImportHelper importHelper = new ImportHelper();
-        Importer importer = importHelper.getImported(importHelper, EXCEL);
+        Importer importer = importHelper.getImported(importHelper, BREVO);
         importer.importApolloList(listInfo);
+        printMenu(attempts, false);
         break;
       default:
         ++attempts;
@@ -135,7 +138,7 @@ public class ApolloScrappingProcess {
   }
 
   private void exportTheList(ApolloSavedList listInfo, int attempts)
-      throws URISyntaxException, IOException {
+      throws URISyntaxException, IOException, ParseException {
     ExportHelper exportHelper = new ExportHelper();
     Exporter exporter = exportHelper.getExporter(exportHelper, EXCEL);
     exporter.export(listInfo);
@@ -151,7 +154,8 @@ public class ApolloScrappingProcess {
     return listInfo;
   }
 
-  private void printMenu(int attempts, boolean isError) throws URISyntaxException, IOException {
+  private void printMenu(int attempts, boolean isError)
+      throws URISyntaxException, IOException, ParseException {
     clearScreen();
     System.out.println(
         "Export/Import another list? Press 'Y' to proceed and any other key to quit");

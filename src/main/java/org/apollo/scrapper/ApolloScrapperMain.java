@@ -4,6 +4,7 @@ import static org.apollo.scrapper.constants.Constants.*;
 import static org.apollo.scrapper.constants.ApolloConstants.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -12,7 +13,7 @@ import org.apollo.scrapper.process.ApolloScrappingProcess;
 public class ApolloScrapperMain {
 
   public static void main(String[] args)
-      throws IOException, URISyntaxException, InterruptedException {
+      throws IOException, URISyntaxException, InterruptedException, ParseException {
     clearScreen();
     System.out.println(BANNER);
     if (API_KEY == null || API_KEY.isEmpty()) {
