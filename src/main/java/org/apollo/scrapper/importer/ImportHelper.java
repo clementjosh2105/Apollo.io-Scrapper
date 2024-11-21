@@ -24,7 +24,6 @@ public class ImportHelper {
     ResponseEntity<String> result =
         restTemplate.exchange(uri, HttpMethod.POST, requestEntity, String.class);
 
-    log.info("Response to Brevo with url {}", result.getBody());
     return result.getBody();
   }
 
@@ -56,7 +55,7 @@ public class ImportHelper {
     return result.getBody();
   }
 
-  public Importer getImported(ImportHelper importHelper, String name) {
+  public Importer getImporter(ImportHelper importHelper, String name) {
     return new BrevoImporter(importHelper, BREVO);
   }
 }

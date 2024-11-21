@@ -127,7 +127,7 @@ public class ApolloScrappingProcess {
         break;
       case "2":
         ImportHelper importHelper = new ImportHelper();
-        Importer importer = importHelper.getImported(importHelper, BREVO);
+        Importer importer = importHelper.getImporter(importHelper, BREVO);
         importer.importApolloList(listInfo);
         printMenu(attempts, false);
         break;

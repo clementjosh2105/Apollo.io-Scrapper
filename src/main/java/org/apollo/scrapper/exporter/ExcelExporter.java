@@ -195,7 +195,7 @@ public class ExcelExporter implements Exporter {
       throws URISyntaxException, JsonProcessingException {
     String ids =
         String.join(
-                '"' + "," + '"',
+            '"' + "," + '"',
             apolloContactResponse.getContacts().stream()
                 .map(ApolloContacts::getOrganizationId)
                 .collect(Collectors.toSet()));
@@ -210,7 +210,7 @@ public class ExcelExporter implements Exporter {
             Collectors.toMap(
                 ApolloIndustryResponse::getId,
                 apolloIndustryResponse ->
-                    String.join( "," , apolloIndustryResponse.getIndustries())));
+                    String.join(",", apolloIndustryResponse.getIndustries())));
   }
 
   private int getStartingRowNumber(int batchCount) {
