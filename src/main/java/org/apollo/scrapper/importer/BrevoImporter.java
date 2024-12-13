@@ -43,7 +43,7 @@ public class BrevoImporter implements Importer {
     return simpleDateFormat.parse(startDateStr);
   }
 
-  private Date getStartDate(String date) throws ParseException {
+  private Date getDate(String date) throws ParseException {
     System.out.println("Enter the " + date + " date: ");
     return getDate();
   }
@@ -58,19 +58,28 @@ public class BrevoImporter implements Importer {
     System.out.println("Press '2' process all records");
     Scanner scanner = new Scanner(System.in);
     String ip = scanner.nextLine();
+
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    BrevoCreateListBean brevoCreateListBean =
+        BrevoCreateListBean.builder().name(getListName()).folderId(folderId).build();
+    String json = importHelper.getResponse(brevoCreateListBean, CREATE_LIST_URL);
+    BrevoCreateFolderOrListResponseBean brevoCreateFolderOrListResponseBean =
+        mapper.readValue(json, BrevoCreateFolderOrListResponseBean.class);
+    int listId = brevoCreateFolderOrListResponseBean.getId();
     switch (ip) {
       case "1":
-        Date startDate = getStartDate("start");
+        Date startDate = getDate("start");
         log.info("Start date from input: {}", startDate);
-        Date endDate = getStartDate("end");
+        Date endDate = getDate("end");
         log.info("End date from input: {}", endDate);
         for (int i = 1; i <= iterationCount; i++) {
-          processContacts(folderId, startDate, endDate, apolloSavedList, i);
+          processContacts(listId, startDate, endDate, apolloSavedList, i);
         }
         break;
       case "2":
         for (int i = 1; i <= iterationCount; i++) {
-          processContacts(folderId, null, null, apolloSavedList, i);
+          processContacts(listId, null, null, apolloSavedList, i);
         }
         break;
       default:
@@ -101,7 +110,7 @@ public class BrevoImporter implements Importer {
   }
 
   private void processContacts(
-      int folderId, Date startDate, Date endDate, ApolloSavedList apolloSavedList, int batchCount)
+      int listId, Date startDate, Date endDate, ApolloSavedList apolloSavedList, int batchCount)
       throws URISyntaxException, IOException {
     final String requestBody =
         String.format(REQUEST_FOR_CONTACT_LIST, apolloSavedList.getId(), batchCount);
@@ -134,13 +143,6 @@ public class BrevoImporter implements Importer {
       if (!isContactAdded) isContactAdded = true;
     }
     if (isContactAdded) {
-      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      BrevoCreateListBean brevoCreateListBean =
-          BrevoCreateListBean.builder().name(getListName()).folderId(folderId).build();
-      json = importHelper.getResponse(brevoCreateListBean, CREATE_LIST_URL);
-      BrevoCreateFolderOrListResponseBean brevoCreateFolderOrListResponseBean =
-          mapper.readValue(json, BrevoCreateFolderOrListResponseBean.class);
-      int listId = brevoCreateFolderOrListResponseBean.getId();
 
       BrevoContactsImportBean brevoContactsImportBean =
           BrevoContactsImportBean.builder()
